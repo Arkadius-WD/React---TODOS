@@ -4,10 +4,30 @@ import { Form } from "./components/Form/Form";
 import { TodoItem } from "./components/TodoItem/TodoItem";
 import { getSubheading } from "./utils/getSubheading";
 
+function generateUniqueId() {
+	return new Date().getTime();
+}
+
+function sendItemToBackend(item) {
+	fetch("http://127.0.0.1:8888/todos", {
+		method: "POST",
+		body: JSON.stringify(item),
+		headers: {
+			"Content-type": "application/json",
+		},
+	});
+}
+
+async function getItemsFromBackend() {
+	const res = await fetch("http://127.0.0.1:8888/todos");
+	return res.json();
+}
+
 function App() {
 	const [isFormShown, setIsFormShown] = useState(false);
 	const [todos, setTodos] = useState(() => {
 		const storedTodos = JSON.parse(localStorage.getItem("todos"));
+
 		return (
 			storedTodos || [
 				{ name: "Zapłacić rachunki", done: false, id: generateUniqueId() },
@@ -17,22 +37,18 @@ function App() {
 
 	useEffect(() => {
 		localStorage.setItem("todos", JSON.stringify(todos));
+		getItemsFromBackend(todos);
 	}, [todos]);
 
-	function generateUniqueId() {
-		return new Date().getTime();
-	}
-
 	function addItem(newTodoName) {
-		setTodos((prevTodos) => [
-			...prevTodos,
-			{
-				name: newTodoName,
-				done: false,
-				id: generateUniqueId(),
-			},
-		]);
+		const newTodo = {
+			name: newTodoName,
+			done: false,
+			id: generateUniqueId(),
+		};
+		setTodos((prevTodos) => [...prevTodos, newTodo]);
 		setIsFormShown(false);
+		sendItemToBackend(newTodo);
 	}
 
 	function deleteItem(id) {
