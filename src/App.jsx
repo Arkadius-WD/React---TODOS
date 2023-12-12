@@ -4,41 +4,57 @@ import { Form } from "./components/Form/Form";
 import { TodoItem } from "./components/TodoItem/TodoItem";
 import { getSubheading } from "./utils/getSubheading";
 
+const URL = "http://127.0.0.1:8888/todos";
+
 function generateUniqueId() {
 	return new Date().getTime();
 }
 
-function sendItemToBackend(item) {
-	fetch("http://127.0.0.1:8888/todos", {
-		method: "POST",
-		body: JSON.stringify(item),
-		headers: {
-			"Content-type": "application/json",
-		},
-	});
+async function sendItemToBackend(item) {
+	try {
+		await fetch(URL, {
+			method: "POST",
+			body: JSON.stringify(item),
+			headers: {
+				"Content-type": "application/json",
+			},
+		});
+	} catch (error) {
+		console.error("Błąd wysyłania danych do backendu:", error);
+	}
 }
 
 async function getItemsFromBackend() {
-	const res = await fetch("http://127.0.0.1:8888/todos");
-	return res.json();
+	try {
+		const res = await fetch(URL);
+		const data = await res.json();
+		return data.todoList;
+	} catch (error) {
+		console.error("Błąd pobierania danych:", error);
+		throw error;
+	}
 }
 
 function App() {
 	const [isFormShown, setIsFormShown] = useState(false);
-	const [todos, setTodos] = useState(() => {
-		const storedTodos = JSON.parse(localStorage.getItem("todos"));
-
-		return (
-			storedTodos || [
-				{ name: "Zapłacić rachunki", done: false, id: generateUniqueId() },
-			]
-		);
-	});
+	const [todos, setTodos] = useState([]);
 
 	useEffect(() => {
-		localStorage.setItem("todos", JSON.stringify(todos));
-		getItemsFromBackend(todos);
-	}, [todos]);
+		async function fetchData() {
+			try {
+				const data = await getItemsFromBackend();
+				setTodos(data);
+			} catch (error) {
+				console.error("Błąd pobierania danych:", error);
+			}
+		}
+
+		fetchData();
+	}, []);
+
+	// useEffect(() => {
+	// 	localStorage.setItem("todos", JSON.stringify(todos));
+	// }, [todos]);
 
 	function addItem(newTodoName) {
 		const newTodo = {
