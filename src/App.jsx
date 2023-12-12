@@ -1,38 +1,16 @@
 import { useState, useEffect } from "react";
-import styles from "./App.module.css";
 import { Form } from "./components/Form/Form";
 import { TodoItem } from "./components/TodoItem/TodoItem";
 import { getSubheading } from "./utils/getSubheading";
-
-const URL = "http://127.0.0.1:8888/todos";
+import {
+	deleteItemFromBackend,
+	getItemsFromBackend,
+	sendItemToBackend,
+} from "./utils/api";
+import styles from "./App.module.css";
 
 function generateUniqueId() {
 	return new Date().getTime();
-}
-
-async function sendItemToBackend(item) {
-	try {
-		await fetch(URL, {
-			method: "POST",
-			body: JSON.stringify(item),
-			headers: {
-				"Content-type": "application/json",
-			},
-		});
-	} catch (error) {
-		console.error("Błąd wysyłania danych do backendu:", error);
-	}
-}
-
-async function getItemsFromBackend() {
-	try {
-		const res = await fetch(URL);
-		const data = await res.json();
-		return data.todoList;
-	} catch (error) {
-		console.error("Błąd pobierania danych:", error);
-		throw error;
-	}
 }
 
 function App() {
@@ -48,13 +26,8 @@ function App() {
 				console.error("Błąd pobierania danych:", error);
 			}
 		}
-
 		fetchData();
 	}, []);
-
-	// useEffect(() => {
-	// 	localStorage.setItem("todos", JSON.stringify(todos));
-	// }, [todos]);
 
 	function addItem(newTodoName) {
 		const newTodo = {
@@ -69,6 +42,7 @@ function App() {
 
 	function deleteItem(id) {
 		setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+		deleteItemFromBackend(id);
 	}
 
 	function finishItem(id) {
