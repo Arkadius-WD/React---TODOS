@@ -45,7 +45,7 @@ function App() {
 		deleteItemFromBackend(id);
 	}
 
-	function finishItem(id) {
+	function toggleDoneItem(id) {
 		setTodos((prevTodos) =>
 			prevTodos.map((todo) => {
 				if (todo.id !== id) {
@@ -54,7 +54,7 @@ function App() {
 
 				return {
 					...todo,
-					done: true,
+					done: !todo.done,
 				};
 			})
 		);
@@ -86,7 +86,7 @@ function App() {
 						name={name}
 						done={done}
 						onDeleteButtonClick={() => deleteItem(id)}
-						onDoneButtonClick={() => finishItem(id)}
+						onDoneButtonClick={() => toggleDoneItem(id)}
 					/>
 				))}
 			</ul>

@@ -1,18 +1,38 @@
 .item {
-    list-style-type: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-top: 1px solid black;
-    margin-top: 16px;
-    padding-top: 16px;
-    min-width: 400px;
+	list-style-type: none;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	border-top: 1px solid black;
+	margin-top: 16px;
+	padding-top: 16px;
+	min-width: 400px;
 }
 
 .name {
-    width: 100%;
+	width: 100%;
 }
 
 .done {
-    text-decoration: line-through;
+	text-decoration: line-through;
+}
+
+.button {
+	color: var(--color-main);
+	background-color: transparent;
+	border: solid 1px currentColor;
+	border-radius: 4px;
+	padding: 4px 8px;
+	cursor: pointer;
+	transition: all 0.3s;
+}
+
+.button__done {
+	color: grey;
+	background-color: rgba(128, 128, 128, 0.1);
+}
+
+.button:hover {
+	color: white;
+	background-color: var(--color-main);
 }
