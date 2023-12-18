@@ -6,6 +6,7 @@ import {
 	deleteItemFromBackend,
 	getItemsFromBackend,
 	sendItemToBackend,
+	patchItemToBackend,
 } from "./utils/api";
 import styles from "./App.module.css";
 
@@ -58,6 +59,9 @@ function App() {
 				};
 			})
 		);
+		patchItemToBackend(id);
+		console.log(id);
+		console.log(todos);
 	}
 
 	return (

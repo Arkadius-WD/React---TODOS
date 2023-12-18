@@ -31,6 +31,20 @@ export async function deleteItemFromBackend(id) {
 			method: "DELETE",
 		});
 	} catch (error) {
+		console.error("Błąd wysyłania danych z backendu:", error);
+	}
+}
+
+export async function patchItemToBackend(item) {
+	try {
+		await fetch(`${URL}/${item.id}`, {
+			method: "PATCH",
+			body: JSON.stringify(item),
+			headers: {
+				"Content-type": "application/json",
+			},
+		});
+	} catch (error) {
 		console.error("Błąd wysyłania danych do backendu:", error);
 	}
 }
