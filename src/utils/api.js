@@ -39,7 +39,7 @@ export async function patchItemToBackend(item) {
 	try {
 		await fetch(`${URL}/${item.id}`, {
 			method: "PATCH",
-			body: JSON.stringify(item),
+			body: JSON.stringify({ done: item.done }),
 			headers: {
 				"Content-type": "application/json",
 			},

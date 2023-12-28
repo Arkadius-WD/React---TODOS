@@ -59,9 +59,8 @@ function App() {
 				};
 			})
 		);
-		patchItemToBackend(id);
+		patchItemToBackend({ id });
 		console.log(id);
-		console.log(todos);
 	}
 
 	return (
