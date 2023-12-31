@@ -36,15 +36,26 @@ export async function deleteItemFromBackend(id) {
 }
 
 export async function patchItemToBackend(item) {
-	try {
-		await fetch(`${URL}/${item.id}`, {
-			method: "PATCH",
-			body: JSON.stringify({ done: item.done }),
-			headers: {
-				"Content-type": "application/json",
-			},
-		});
-	} catch (error) {
-		console.error("Błąd wysyłania danych do backendu:", error);
-	}
+    try {
+        const response = await fetch(`${URL}/${item.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ done: item.done }), 
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const jsonResponse = await response.text();
+        return jsonResponse ? JSON.parse(jsonResponse) : null;
+    } catch (error) {
+        console.error("Błąd wysyłania danych do backendu:", error);
+        throw error; 
+    }
 }
+
+
+
+

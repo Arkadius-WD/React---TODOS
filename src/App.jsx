@@ -46,7 +46,9 @@ function App() {
 		deleteItemFromBackend(id);
 	}
 
-	function toggleDoneItem(id) {
+	function toggleDoneItem(id, done) {
+		console.log("Toggle Done - ID:", id, "Done:", done);
+
 		setTodos((prevTodos) =>
 			prevTodos.map((todo) => {
 				if (todo.id !== id) {
@@ -59,8 +61,8 @@ function App() {
 				};
 			})
 		);
-		patchItemToBackend({ id });
-		console.log(id);
+		patchItemToBackend({ id, done });
+		console.log("Toggle Done - ID:", id, "Done:", done);
 	}
 
 	return (
@@ -89,7 +91,7 @@ function App() {
 						name={name}
 						done={done}
 						onDeleteButtonClick={() => deleteItem(id)}
-						onDoneButtonClick={() => toggleDoneItem(id)}
+						onDoneButtonClick={() => toggleDoneItem(id, done)}
 					/>
 				))}
 			</ul>
