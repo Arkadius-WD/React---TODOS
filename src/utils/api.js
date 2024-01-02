@@ -37,7 +37,7 @@ export async function deleteItemFromBackend(id) {
 
 export async function patchItemToBackend(item) {
     try {
-        const response = await fetch(`${URL}/${item.id}`, {
+        await fetch(`${URL}/${item.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -45,11 +45,6 @@ export async function patchItemToBackend(item) {
             body: JSON.stringify({ done: item.done }), 
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const jsonResponse = await response.text();
-        return jsonResponse ? JSON.parse(jsonResponse) : null;
     } catch (error) {
         console.error("Błąd wysyłania danych do backendu:", error);
         throw error; 
