@@ -17,14 +17,17 @@ function generateUniqueId() {
 function App() {
 	const [isFormShown, setIsFormShown] = useState(false);
 	const [todos, setTodos] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		async function fetchData() {
 			try {
 				const data = await getItemsFromBackend();
 				setTodos(data);
+				setIsLoading(false);
 			} catch (error) {
 				console.error("Błąd pobierania danych:", error);
+				setIsLoading(false);
 			}
 		}
 		fetchData();
@@ -65,34 +68,42 @@ function App() {
 
 	return (
 		<div className={styles.container}>
-			<header className={styles.header}>
-				<div>
-					<h1>Do zrobienia</h1>
-					<h2>{getSubheading(todos.length)}</h2>
+			{isLoading ? (
+				<div className={styles.loader}>
+					<img src="./src/assets/loader.svg" alt="loader" />
 				</div>
-				{!isFormShown && (
-					<button
-						onClick={() => setIsFormShown(true)}
-						className={styles.button}
-					>
-						+
-					</button>
-				)}
-			</header>
-			{isFormShown && (
-				<Form onFormSubmit={(newTodoName) => addItem(newTodoName)} />
+			) : (
+				<div>
+					<header className={styles.header}>
+						<div>
+							<h1>Do zrobienia</h1>
+							<h2>{getSubheading(todos.length)}</h2>
+						</div>
+						{!isFormShown && (
+							<button
+								onClick={() => setIsFormShown(true)}
+								className={styles.button}
+							>
+								+
+							</button>
+						)}
+					</header>
+					{isFormShown && (
+						<Form onFormSubmit={(newTodoName) => addItem(newTodoName)} />
+					)}
+					<ul>
+						{todos.map(({ id, name, done }) => (
+							<TodoItem
+								key={id}
+								name={name}
+								done={done}
+								onDeleteButtonClick={() => deleteItem(id)}
+								onDoneButtonClick={() => toggleDoneItem(id, done)}
+							/>
+						))}
+					</ul>
+				</div>
 			)}
-			<ul>
-				{todos.map(({ id, name, done }) => (
-					<TodoItem
-						key={id}
-						name={name}
-						done={done}
-						onDeleteButtonClick={() => deleteItem(id)}
-						onDoneButtonClick={() => toggleDoneItem(id, done)}
-					/>
-				))}
-			</ul>
 		</div>
 	);
 }

@@ -44,7 +44,6 @@ export async function patchItemToBackend(item) {
             },
             body: JSON.stringify({ done: item.done }), 
         });
-
     } catch (error) {
         console.error("Błąd wysyłania danych do backendu:", error);
         throw error; 
