@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../Button/Button";
 import styles from "./TodoItem.module.css";
 
 export function TodoItem({
 	name,
-	done,
+	done: initialDone,
 	onDeleteButtonClick,
 	onDoneButtonClick,
 }) {
-	const [isButtonShown, setIsButtonShown] = useState(true);
+	const [done, setDone] = useState(initialDone);
+
+	useEffect(() => {
+		setDone(initialDone);
+	}, [initialDone]);
+
 	const handleClick = () => {
 		onDoneButtonClick();
-		setIsButtonShown((prevIsButtonShown) => !prevIsButtonShown);
 	};
 
 	return (
@@ -21,12 +25,10 @@ export function TodoItem({
 			</span>
 
 			<button
-				className={`${styles.button} ${
-					isButtonShown ? "" : styles.button__done
-				}`}
+				className={`${styles.button} ${done ? styles.button__done : ""}`}
 				onClick={handleClick}
 			>
-				{isButtonShown ? "Zrobione" : "Anuluj"}
+				{done ? "Anuluj" : "Zrobione"}
 			</button>
 			<Button className={styles.button} onClick={onDeleteButtonClick}>
 				Usuń

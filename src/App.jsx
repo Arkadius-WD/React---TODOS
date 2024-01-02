@@ -47,8 +47,6 @@ function App() {
 	}
 
 	function toggleDoneItem(id, done) {
-		console.log("Toggle Done - ID:", id, "Done:", done);
-
 		setTodos((prevTodos) =>
 			prevTodos.map((todo) => {
 				if (todo.id !== id) {
@@ -61,8 +59,8 @@ function App() {
 				};
 			})
 		);
-		patchItemToBackend({ id, done });
-		console.log("Toggle Done - ID:", id, "Done:", done);
+
+		patchItemToBackend({ id, done: !done });
 	}
 
 	return (
