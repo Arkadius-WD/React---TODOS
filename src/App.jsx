@@ -70,7 +70,7 @@ function App() {
 		<div className={styles.container}>
 			{isLoading ? (
 				<div className={styles.loader}>
-					<img src="./src/assets/loader.svg" alt="loader" />
+					<img src="assets/loader.svg" alt="loader" />
 				</div>
 			) : (
 				<div>
